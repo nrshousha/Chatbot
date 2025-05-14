@@ -5,10 +5,11 @@ import sys
 import os
 # used for operating system interaction like clearing the terminal 
 from colorama import Fore, Style, init
-from fuzzywuzzy import process
+from fuzzywuzzy import process #handles mistyped commands
 import threading
-#handles mistyped commands 
+
 from threads import threadFN
+safe_print, async_log = threadFN()  # unpack the tools
 
 class Interface():
 
@@ -42,7 +43,7 @@ class Interface():
         self.type_effect(help_text) 
 
     def exit(self):
-        print("Exiting the program.")
+        safe_print("Exiting the program.")
         self.exit_chat()  # calls for the exit 
 
     def exit_chat(self):

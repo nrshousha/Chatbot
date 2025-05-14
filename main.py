@@ -6,6 +6,8 @@ from interface import Interface
 import logger
 import system_info
 import threading
+from threads import threadFN
+safe_print, async_log = threadFN()  # unpack the tools
 
 HOST = '127.0.0.1'  # server's hostname or IP address
 PORT = 65432        # The port used by the server
@@ -28,16 +30,16 @@ def main():
     args = parse_args()  # read terminal arguments like --debug or --log
 
     if args.debug:
-        print("Debug mode is enabled.") 
+        safe_print("Debug mode is enabled.") 
     if args.log:
-        print("Logging is turned on.") 
+        safe_print("Logging is turned on.") 
 
     ui = Interface()  # object to handle user interaction
 
     # Connect to the server socket
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((HOST, PORT))  # connect to server at specified HOST and PORT
-        print(f"[CLIENT] Connected to server at {HOST}:{PORT}")
+        safe_print(f"[CLIENT] Connected to server at {HOST}:{PORT}")
 
         # 🌟 Receive mood prompt from server
         mood_prompt = s.recv(1024).decode('utf-8')  # receive the mood question from server
@@ -96,7 +98,7 @@ def main():
                 ui.exit_chat()  # exit if Ctrl+C is pressed
                 break
             except Exception as e:
-                print(f"Error: {e}")  # catch any errors
+                safe_print(f"Error: {e}")  # catch any errors
                 if args.debug:
                     import traceback
                     traceback.print_exc()  # print full error if in debug mode
